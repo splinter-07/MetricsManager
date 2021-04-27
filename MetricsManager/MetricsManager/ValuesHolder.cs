@@ -8,16 +8,14 @@ namespace MetricsManager
     public class ValuesHolder
     {
         public DateTime Date { get; set; }
-
         public int Temperature { get; set; }
+
         public List<ValuesHolder> listTemperature = new List<ValuesHolder>();
 
         public void SaveTemperature(DateTime dateTime, int temperature)
         {
             listTemperature.Add(new ValuesHolder { Date = dateTime, Temperature = temperature });
-
         }
-
 
         public void UpdateTemperature(DateTime date, int newTemperature)
         {
@@ -44,12 +42,11 @@ namespace MetricsManager
 
         public void DeleteTemperature(DateTime dateBegin, DateTime dateEnd)
         {
-            for (int i = 0; i < listTemperature.Count; i++)
+            for (int i = listTemperature.Count-1; i >= 0; i--)
             {
                 if (listTemperature[i].Date >= dateBegin && listTemperature[i].Date <= dateEnd)
                 {
                     listTemperature.RemoveAt(i);
-                    i--;
                 }
 
             }
