@@ -18,8 +18,8 @@ namespace MetricsAgentTests
         public void GetMetricsCpuFromTime_ReturnsOk()
         {
             //Подготовка данных
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
+            var fromTime = DateTimeOffset.FromUnixTimeSeconds(0);
+            var toTime = DateTimeOffset.FromUnixTimeSeconds(100);
 
             //Действие
             var result = controller.GetMetricsCpuFromTime(fromTime, toTime);
