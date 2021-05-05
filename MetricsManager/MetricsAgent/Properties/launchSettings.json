@@ -4,8 +4,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:46407",
-      "sslPort": 44369
+      "applicationUrl": "http://localhost:44390",
+      "sslPort": 44366
     }
   },
   "profiles": {
@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "MetricsManager": {
+    "MetricsAgent": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "",
