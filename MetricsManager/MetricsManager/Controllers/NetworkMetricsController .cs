@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +12,25 @@ namespace MetricsManager.Controllers
     [ApiController]
     public class NetworkMetricsController : ControllerBase
     {
-        [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromAgent([FromRoute] int agentId, [FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
+        private readonly ILogger<NetworkMetricsController> _logger;
+
+        public NetworkMetricsController(ILogger<NetworkMetricsController> logger)
         {
+            _logger = logger;
+            _logger.LogDebug(1, "NetworkMetricsController");
+        }
+
+        [HttpGet("agent")]
+        public IActionResult GetMetricsFromAgent([FromQuery] int agentId, [FromBody] TimePeriod period)
+        {
+            _logger.LogInformation($"GetMetricsFromAgent - agentId {agentId}, from {period.From} - to {period.To}");
             return Ok();
         }
 
-        [HttpGet("cluster/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromAllCluster([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
+        [HttpGet("cluster")]
+        public IActionResult GetMetricsFromAllCluster([FromBody] TimePeriod period)
         {
+            _logger.LogInformation($"GetMetricsFromAllCluster - from {period.From} - to {period.To}");
             return Ok();
         }
     }

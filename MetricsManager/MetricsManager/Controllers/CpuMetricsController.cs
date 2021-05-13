@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+
 
 namespace MetricsManager.Controllers
 {
@@ -11,15 +13,25 @@ namespace MetricsManager.Controllers
     [ApiController]
     public class CpuMetricsController : ControllerBase
     {
-        [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromAgent([FromRoute] int agentId, [FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
+        private readonly ILogger<CpuMetricsController> _logger;
+
+        public CpuMetricsController(ILogger<CpuMetricsController> logger)
         {
+            _logger = logger;
+            _logger.LogDebug(1, "CpuMetricsController");
+        }
+
+        [HttpGet("agent")]
+        public IActionResult GetMetricsFromAgent([FromQuery] int agentId, [FromBody] TimePeriod period)
+        {
+            _logger.LogInformation($"GetMetricsFromAgent - agentId {agentId}, from {period.From} - to {period.To}");
             return Ok();
         }
 
-        [HttpGet("cluster/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromAllCluster([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
+        [HttpGet("cluster")]
+        public IActionResult GetMetricsFromAllCluster([FromBody] TimePeriod period)
         {
+            _logger.LogInformation($"GetMetricsFromAllCluster - from {period.From} - to {period.To}");
             return Ok();
         }
     }

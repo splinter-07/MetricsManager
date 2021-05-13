@@ -1,31 +1,66 @@
-﻿using MetricsAgent.Controllers;
+﻿using MetricsAgent;
+using MetricsAgent.Controllers;
+using MetricsAgent.DAL;
+using MetricsAgent.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace MetricsAgentTests
 {
     public class HddControllerUnitTests
     {
-        private HddMetricsController controller;
+        private HddMetricsController _controller;
+        private Mock<IHddMetricsRepository> _mock;
+        private Mock<ILogger<HddMetricsController>> _logger;
 
         public HddControllerUnitTests()
         {
-            controller = new HddMetricsController();
+            _mock = new Mock<IHddMetricsRepository>();
+            _logger = new Mock<ILogger<HddMetricsController>>();
+            _controller = new HddMetricsController(_mock.Object, _logger.Object);
         }
 
         [Fact]
-        public void GetMetricsHddFreeDispSpace_ReturnsOk()
+        public void Create_ShouldCall_Create_From_Repository()
         {
-            //Подготовка данных
-            var fromTime = DateTimeOffset.FromUnixTimeSeconds(0);
-            var toTime = DateTimeOffset.FromUnixTimeSeconds(100);
+            // устанавливаем параметр заглушки
+            // в заглушке прописываем что в репозиторий прилетит HddMetric объект
+            _mock.Setup(repository => repository.Create(It.IsAny<HddMetric>())).Verifiable();
 
-            //Действие
-            var result = controller.GetMetricsHddFreeDispSpace(fromTime, toTime);
+            // выполняем действие на контроллере
+            var result = _controller.Create(new MetricsAgent.Requests.HddMetricCreateRequest { Time = DateTimeOffset.FromUnixTimeSeconds(1), Value = 50 });
 
-            //Проверка результата
-            _ = Assert.IsAssignableFrom<IActionResult>(result);
+            // проверяем заглушку на то, что пока работал контроллер
+            // действительно вызвался метод Create репозитория с нужным типом объекта в параметре
+            _mock.Verify(repository => repository.Create(It.IsAny<HddMetric>()), Times.AtMostOnce());
+        }
+
+        [Fact]
+        public void All_ShouldCall_All_From_Repository()
+        {
+            _mock.Setup(repository => repository.GetAll()).Returns(new List<HddMetric>());
+
+            var result = _controller.GetAll();
+
+            _mock.Verify(repository => repository.GetAll(), Times.AtMostOnce());
+        }
+
+        [Fact]
+        public void ByPeriod_ShouldCall_ByPeriod_From_Repository()
+        {
+            _mock.Setup(repository => repository.GetByTimePeriod(It.IsAny<TimePeriod>())).Returns(new List<HddMetric>());
+
+            var result = _controller.GetMetricsHddByTimePeriod(new TimePeriod
+            {
+                From = DateTimeOffset.FromUnixTimeSeconds(1620801171),
+                To = DateTimeOffset.FromUnixTimeSeconds(1620801172)
+            });
+
+            _mock.Verify(repository => repository.GetByTimePeriod(It.IsAny<TimePeriod>()), Times.AtMostOnce());
         }
     }
 }
