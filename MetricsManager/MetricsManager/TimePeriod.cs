@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace MetricsManager
 {
-    public class AgentInfo
+    public class TimePeriod
     {
-        public int AgentId { get; set; }
-        public Uri AgentAddress { get; set; }
+        public DateTimeOffset From { get; set; }
+        public DateTimeOffset To { get; set; }
     }
 }

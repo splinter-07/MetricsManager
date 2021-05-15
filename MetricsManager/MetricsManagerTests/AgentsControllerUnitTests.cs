@@ -1,19 +1,26 @@
 ﻿using MetricsManager;
 using MetricsManager.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using Xunit;
+using Moq;
 
 namespace MetricsManagerTests
 {
     public class AgentsControllerUnitTests
     {
-        private AgentsController controller;
+        private AgentsController _controller;
+        private Mock<ILogger<AgentsController>> _logger;
+        private Mock<AgentsController> _mock;
 
         public AgentsControllerUnitTests()
         {
-            controller = new AgentsController();
+            _mock = new Mock<AgentsController>();
+            _logger = new Mock<ILogger<AgentsController>>();
+            _controller = new AgentsController(_logger.Object) ;
         }
+
         [Fact]
         public void RegisterAgent_ReturnsOk()
         {
@@ -21,7 +28,7 @@ namespace MetricsManagerTests
             var agentInfo = new AgentInfo();
 
             //Действие
-            var result = controller.RegisterAgent(agentInfo);
+            var result = _controller.RegisterAgent(agentInfo);
 
             //Проверка результата
             _ = Assert.IsAssignableFrom<IActionResult>(result);
@@ -34,7 +41,7 @@ namespace MetricsManagerTests
             var agentId = 1;
 
             //Действие
-            var result = controller.EnableAgentById(agentId);
+            var result = _controller.EnableAgentById(agentId);
 
             //Проверка результата
             _ = Assert.IsAssignableFrom<IActionResult>(result);
@@ -47,16 +54,17 @@ namespace MetricsManagerTests
             var agentId = 1;
 
             //Действие
-            var result = controller.DisableAgentById(agentId);
+            var result = _controller.DisableAgentById(agentId);
 
             //Проверка результата
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
+
         [Fact]
         public void GetAllRegisterAgents_ReturnsOk()
         {
             //Действие
-            var result = controller.GetAllRegisterAgents();
+            var result = _controller.GetAllRegisterAgents();
 
             //Проверка результата
             _ = Assert.IsAssignableFrom<IActionResult>(result);
