@@ -1,7 +1,0 @@
-2021-05-08 17:49:14.5717 Info Message Template Auto Format enabled
-2021-05-08 17:49:14.5889 Info Loading assembly: NLog.Web.AspNetCore
-2021-05-08 17:49:14.6626 Info Adding target FileTarget(Name=allfile)
-2021-05-08 17:49:14.6743 Info Adding target FileTarget(Name=ownFile-web)
-2021-05-08 17:49:14.6743 Warn Skipping unrecognized property 'tolower=true` for ${level} (NLog.LayoutRenderers.LevelLayoutRenderer)
-2021-05-08 17:49:14.6743 Info Adding target ConsoleTarget(Name=lifetimeConsole)
-2021-05-08 17:49:14.7345 Info Validating config: TargetNames=allfile, lifetimeConsole, ownFile-web, ConfigItems=65, FilePath=C:\Users\splin\Documents\GitHub\MetricsManager\MetricsManager\MetricsManager\bin\Debug\netcoreapp3.1\nlog.config
