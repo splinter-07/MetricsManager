@@ -8,6 +8,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using Xunit;
+using AutoMapper;
 
 namespace MetricsAgentTests
 {
@@ -16,12 +17,14 @@ namespace MetricsAgentTests
         private HddMetricsController _controller;
         private Mock<IHddMetricsRepository> _mock;
         private Mock<ILogger<HddMetricsController>> _logger;
+        private Mock<IMapper> _mapper;
 
         public HddControllerUnitTests()
         {
             _mock = new Mock<IHddMetricsRepository>();
             _logger = new Mock<ILogger<HddMetricsController>>();
-            _controller = new HddMetricsController(_mock.Object, _logger.Object);
+            _mapper = new Mock<IMapper>();
+            _controller = new HddMetricsController(_mock.Object, _logger.Object, _mapper.Object);
         }
 
         [Fact]

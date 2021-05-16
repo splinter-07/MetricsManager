@@ -10,6 +10,7 @@ using MetricsAgent.Requests;
 using MetricsAgent.Responses;
 using MetricsAgent.Models;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 namespace MetricsAgent.Controllers
 {
@@ -19,12 +20,14 @@ namespace MetricsAgent.Controllers
     {
         private ICpuMetricsRepository _repository;
         private readonly ILogger<CpuMetricsController> _logger;
+        private readonly IMapper _mapper;
 
-        public CpuMetricsController(ICpuMetricsRepository repository, ILogger<CpuMetricsController> logger)
+        public CpuMetricsController(ICpuMetricsRepository repository, ILogger<CpuMetricsController> logger, IMapper mapper)
         {
             this._repository = repository;
             _logger = logger;
             _logger.LogDebug(1, "CpuMetricsController");
+            this._mapper = mapper;
         }
 
         [HttpPost("create")]
@@ -53,7 +56,7 @@ namespace MetricsAgent.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new CpuMetricDto { Time = metric.Time, Value = metric.Value, Id = metric.Id });
+                response.Metrics.Add(_mapper.Map<CpuMetricDto>(metric));
             }
 
             _logger.LogInformation($"All records were successfully displayed");
@@ -73,7 +76,7 @@ namespace MetricsAgent.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new CpuMetricDto { Time = metric.Time, Value = metric.Value, Id = metric.Id });
+                response.Metrics.Add(_mapper.Map<CpuMetricDto>(metric));
             }
 
             _logger.LogInformation($"All records of the period: {timePeriod.From} - {timePeriod.To} displayed successfully");

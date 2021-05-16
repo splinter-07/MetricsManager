@@ -1,4 +1,5 @@
-﻿using MetricsAgent.DAL;
+﻿using AutoMapper;
+using MetricsAgent.DAL;
 using MetricsAgent.Models;
 using MetricsAgent.Requests;
 using MetricsAgent.Responses;
@@ -17,14 +18,15 @@ namespace MetricsAgent.Controllers
     public class RamMetricsController : ControllerBase
     {
         private IRamMetricsRepository _repository;
-
         private readonly ILogger<RamMetricsController> _logger;
+        private readonly IMapper _mapper;
 
-        public RamMetricsController(IRamMetricsRepository repository, ILogger<RamMetricsController> logger)
+        public RamMetricsController(IRamMetricsRepository repository, ILogger<RamMetricsController> logger, IMapper mapper)
         {
             this._repository = repository;
             _logger = logger;
             _logger.LogDebug(1, "NetworkMetricsController");
+            this._mapper = mapper;
         }
 
         [HttpPost("create")]
@@ -53,7 +55,7 @@ namespace MetricsAgent.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new RamMetricDto { Time = metric.Time, Value = metric.Value, Id = metric.Id });
+                response.Metrics.Add(_mapper.Map<RamMetricDto>(metric));
             }
 
             _logger.LogInformation($"All records were successfully displayed");
@@ -73,7 +75,7 @@ namespace MetricsAgent.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new RamMetricDto { Time = metric.Time, Value = metric.Value, Id = metric.Id });
+                response.Metrics.Add(_mapper.Map<RamMetricDto>(metric));
             }
 
             _logger.LogInformation($"All records of the period: {timePeriod.From} - {timePeriod.To} displayed successfully");
