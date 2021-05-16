@@ -8,6 +8,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using Xunit;
+using AutoMapper;
 
 namespace MetricsAgentTests
 {
@@ -16,12 +17,14 @@ namespace MetricsAgentTests
         private RamMetricsController _controller;
         private Mock<IRamMetricsRepository> _mock;
         private Mock<ILogger<RamMetricsController>> _logger;
+        private Mock<IMapper> _mapper;
 
         public RamControllerUnitTests()
         {
             _mock = new Mock<IRamMetricsRepository>();
             _logger = new Mock<ILogger<RamMetricsController>>();
-            _controller = new RamMetricsController(_mock.Object, _logger.Object);
+            _mapper = new Mock<IMapper>();
+            _controller = new RamMetricsController(_mock.Object, _logger.Object, _mapper.Object);
         }
 
         [Fact]
