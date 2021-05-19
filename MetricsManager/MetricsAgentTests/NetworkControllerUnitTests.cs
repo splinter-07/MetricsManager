@@ -8,6 +8,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using Xunit;
+using AutoMapper;
 
 namespace MetricsAgentTests
 {
@@ -16,12 +17,14 @@ namespace MetricsAgentTests
         private NetworkMetricsController _controller;
         private Mock<INetworkMetricsRepository> _mock;
         private Mock<ILogger<NetworkMetricsController>> _logger;
+        private Mock<IMapper> _mapper;
 
         public NetworkControllerUnitTests()
         {
             _mock = new Mock<INetworkMetricsRepository>();
             _logger = new Mock<ILogger<NetworkMetricsController>>();
-            _controller = new NetworkMetricsController(_mock.Object, _logger.Object);
+            _mapper = new Mock<IMapper>();
+            _controller = new NetworkMetricsController(_mock.Object, _logger.Object, _mapper.Object);
         }
 
         [Fact]
